@@ -9,7 +9,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
+  "type": "commonjs",
   "description": "",
   "dependencies": {
     "dotenv": "^17.2.3",
