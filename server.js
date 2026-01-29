@@ -2,14 +2,17 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./database/db");
 const bookRoutes = require("./routes/book.routes");
+const adminRoutes = require("./routes/admin.routes");
 const authRoutes = require("./routes/auth.routes");
-
+const homeRoutes = require("./routes/home.routes");
 dotenv.config();
 const app = express();
 app.use(express.json());
 connectDB();
 app.use("/api", bookRoutes);
+app.use("/home", homeRoutes);
 app.use("/auth", authRoutes);
+app.use("/admin", adminRoutes);
 
 const port = process.env.PORT || 3000;
 
