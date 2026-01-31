@@ -27,7 +27,7 @@ const getBookById = async (req, res) => {
     const bookId = req.params.id;
     const singleBook = await Book.findById(bookId);
     if (!singleBook) {
-      res.status(404).json({
+      return res.status(404).json({
         success: false,
         message: "Book Not found, try a different ID",
       });

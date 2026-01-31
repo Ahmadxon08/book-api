@@ -1,6 +1,6 @@
 const uploadToImageKit = require("../helpers/imagekit.helper");
 const imageModel = require("../models/image.model");
-
+const fs = require("fs");
 const uploadImage = async (req, res) => {
   try {
     if (!req.file) {
@@ -26,6 +26,7 @@ const uploadImage = async (req, res) => {
     });
 
     await newUploadedImage.save();
+    fs.unlinkSync(req.file.path);
 
     res.status(201).json({
       success: true,

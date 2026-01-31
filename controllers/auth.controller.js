@@ -21,6 +21,29 @@ const users = async (req, res) => {
   }
 };
 
+const user = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch users",
+    });
+  }
+};
+
 const registerUser = async (req, res) => {
   try {
     const { username, password, email, role } = req.body;
@@ -111,4 +134,5 @@ module.exports = {
   loginUser,
   registerUser,
   users,
+  user,
 };
