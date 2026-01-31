@@ -1,6 +1,26 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
+const users = async (req, res) => {
+  try {
+    const allUsers = await User.find();
+
+    res.status(200).json({
+      success: true,
+      message: "Users fetched successfully",
+      count: allUsers.length,
+      data: allUsers,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch users",
+    });
+  }
+};
+
 const registerUser = async (req, res) => {
   try {
     const { username, password, email, role } = req.body;
@@ -90,4 +110,5 @@ const loginUser = async (req, res) => {
 module.exports = {
   loginUser,
   registerUser,
+  users,
 };
