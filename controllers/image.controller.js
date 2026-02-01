@@ -1,6 +1,7 @@
 const uploadToImageKit = require("../helpers/imagekit.helper");
 const imageModel = require("../models/image.model");
 const fs = require("fs");
+const imagekit = require("./Image");
 const uploadImage = async (req, res) => {
   try {
     if (!req.file) {
@@ -66,8 +67,43 @@ const fetchImage = async (req, res) => {
     });
   }
 };
+const deletedImage = async (req, res) => {
+  try {
+    const deletedImageId = req.params.id;
+    const userId = req.userInfo.userId;
+    const image = await imageModel.findById(deletedImageId);
+    if (!image) {
+      return res.status(404).json({
+        success: false,
+        message: "Deleted image not found",
+      });
+    }
+
+    if (image.uploadedBy.toString() !== userId.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not uploded that image so you can not delete it",
+      });
+    }
+
+    await imagekit.deleteFile(image.publicId);
+    await imageModel.findByIdAndDelete(deletedImageId);
+
+    res.status(200).json({
+      success: true,
+      message: "Image deleted successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "internal server Error",
+    });
+  }
+};
 
 module.exports = {
   uploadImage,
   fetchImage,
+  deletedImage,
 };
