@@ -45,13 +45,19 @@ const uploadImage = async (req, res) => {
 const fetchImage = async (req, res) => {
   try {
     const images = await imageModel.find({});
-    if (images) {
-      return res.status(200).json({
-        success: true,
-        message: "Image fechet successfully",
-        data: ImageTrackList,
+
+    if (!images || images.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Images not found",
       });
     }
+
+    return res.status(200).json({
+      success: true,
+      message: "Images fetched successfully",
+      data: images,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
