@@ -5,8 +5,8 @@ const path = require("path");
 const uploadToImageKit = async (filePath) => {
   try {
     const result = await imagekit.upload({
-      file: fs.readFileSync(filePath), // 👈 MUHIM
-      fileName: path.basename(filePath), // 👈 TO‘G‘RI
+      file: fs.readFileSync(filePath),
+      fileName: path.basename(filePath),
       folder: "uploads/",
     });
 
