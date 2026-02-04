@@ -45,7 +45,25 @@ const uploadImage = async (req, res) => {
 
 const fetchImage = async (req, res) => {
   try {
-    const images = await imageModel.find({});
+    let page = parseInt(req.query.page) || 1;
+    let limit = Math.min(parseInt(req.query.limit) || 2, 50);
+    let sortBy = req.query.sortBy || "createdAt";
+    let sortOrder = req.query.sortOrder === "asc" ? 1 : -1;
+
+    const totalImages = await imageModel.countDocuments();
+    const totalPages = Math.ceil(totalImages / limit);
+    const allowedSortFields = ["createdAt", "updatedAt"];
+    const skip = (page - 1) * limit;
+
+    if (!allowedSortFields.includes(sortBy)) {
+      sortBy = "createdAt";
+    }
+
+    const images = await imageModel
+      .find()
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(limit);
 
     if (!images || images.length === 0) {
       return res.status(404).json({
@@ -56,8 +74,11 @@ const fetchImage = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Images fetched successfully",
+      currentPage: page,
+      totolPage: totalPages,
+      totalImages: totalImages,
       data: images,
+      message: "Images fetched successfully",
     });
   } catch (error) {
     console.log(error);
