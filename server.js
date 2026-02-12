@@ -7,7 +7,7 @@ const authRoutes = require("./routes/auth.routes");
 const homeRoutes = require("./routes/home.routes");
 const uplaodImageRoutes = require("./routes/image.routes");
 const productRoutes = require("./routes/product.routes");
-
+const carRoutes = require("./routes/car.routes");
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -18,6 +18,7 @@ app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 app.use("/image", uplaodImageRoutes);
 app.use("/product", productRoutes);
+app.use("carApi", carRoutes);
 
 const port = process.env.PORT || 3000;
 
